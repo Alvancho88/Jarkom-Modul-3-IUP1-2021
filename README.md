@@ -19,30 +19,14 @@ auto eth2
 iface eth2 inet static
 	address 10.38.2.1
 	netmask 255.255.255.0 
+	
+auto eth3
+iface eth3 inet static
+	address 10.38.3.1
+	netmask 255.255.255.0
  ```
-
-#### EniesLobby (DNS Master)
-```
-auto eth0
-iface eth0 inet static
-	address 10.38.2.2
-	netmask 255.255.255.0
-	gateway 10.38.2.1
-
-```
-
-
-#### Water7 (DNS Slave)
-```
-auto eth0
-iface eth0 inet static
-	address 10.38.2.3
-	netmask 255.255.255.0
-	gateway 10.38.2.1
-
-```
-
-#### Loguetown (Client)
+ 
+ #### Loguetown (Client)
 ```
 auto eth0
 iface eth0 inet static
@@ -60,14 +44,56 @@ iface eth0 inet static
 	gateway 10.38.1.1
 
 ```
-#### Jipangu (Client)
+
+#### EniesLobby (DNS Server)
+```
+auto eth0
+iface eth0 inet static
+	address 10.38.2.2
+	netmask 255.255.255.0
+	gateway 10.38.2.1
+
+```
+
+
+#### Water7 (Proxy Server)
+```
+auto eth0
+iface eth0 inet static
+	address 10.38.2.3
+	netmask 255.255.255.0
+	gateway 10.38.2.1
+
+```
+
+#### Jipangu (DHCP Server)
 
 ```
 auto eth0
 iface eth0 inet static
-	address 10.38.1.4
+	address 10.38.2.4
 	netmask 255.255.255.0
-	gateway 10.38.1.1
+	gateway 10.38.2.1
+```
+
+#### TottoLand (Client)
+
+```
+auto eth0
+iface eth0 inet static
+	address 10.38.3.2
+	netmask 255.255.255.0
+	gateway 10.38.3.1
+```
+
+#### Skypie (Client)
+
+```
+auto eth0
+iface eth0 inet static
+	address 10.38.3.3
+	netmask 255.255.255.0
+	gateway 10.38.3.1
 ```
 
 ## All
