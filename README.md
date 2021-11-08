@@ -193,22 +193,36 @@ service isc-dhcp-server status
 
 ### dhcpd.conf
 ```
-subnet 10.38.0.0 netmask 255.255.255.0 {
-    range 10.38.0.100 10.38.0.169;
-    option routers 10.38.0.1;
-    option broadcast-address 10.38.0.255;
+subnet 10.38.1.0 netmask 255.255.255.0 {
+    range 10.38.1.20 10.38.1.99;
+    range 10.38.1.150 10.38.1.169;
+    option routers 10.38.1.1;
+    option broadcast-address 10.38.1.255;
     option domain-name-servers 10.38.2.2;
-    default-lease-time 60;
-    max-lease-time 60;
+    default-lease-time 360;
+    max-lease-time 7200;
 }
 
-#host Jipangu {
-#    hardware ethernet 92:33:3a:7b:c1:95;
-#    fixed-address 10.38.0.150;
-#}
+subnet 10.38.3.0 netmask 255.255.255.0 {
+    range 10.38.3.30 10.38.3.50;
+    option routers 10.38.3.1;
+    option broadcast-address 10.38.3.255;
+    option domain-name-servers 10.38.2.2;
+    default-lease-time 720;
+    max-lease-time 7200;
+}
+
+subnet 10.38.2.0 netmask 255.255.255.0 {
+        option routers 10.38.2.1;
+}
+
+host Skypie {
+    hardware ethernet 32:da:e0:de:26:d9;
+    fixed-address 10.38.3.69;
+}
 ```
 
-### dhcpd.conf
+### isc-dhcp-server
 ```
 INTERFACES="eth1"
 ```
