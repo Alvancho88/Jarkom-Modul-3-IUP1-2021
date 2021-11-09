@@ -108,11 +108,16 @@ hwaddress ether 4a:ed:9a:f1:bc:97
 ```
 chmod +x config.sh
 
+Foosha
+service isc-dhcp-relay stop
+service isc-dhcp-relay start
+
 EniesLobby
 service bind9 restart
 service bind9 stop
 
 Jipangu
+service isc-dhcp-server start
 service isc-dhcp-server restart
 service isc-dhcp-server status
 dhcpd --version
@@ -120,6 +125,20 @@ dhcpd --version
 Water 7
 service squid restart
 service squid status
+touch /etc/squid/passwd
+
+htpasswd -cm /etc/squid/passwd luffybelikapalIUP1
+luffy_IUP1
+luffy_IUP1
+
+htpasswd -m /etc/squid/passwd zorobelikapalIUP1
+zoro_IUP1
+zoro_IUP1
+
+Client
+export http_proxy=http://10.38.2.3:5000
+env | grep -i proxy
+unset http_proxy
 
 ps aux | grep ping
 kill -9 [pid]
@@ -148,9 +167,6 @@ apt-get install nano
 cp /root/isc-dhcp-relay /etc/default
 cp /root/sysctl.conf /etc
 
-service isc-dhcp-relay start
-
-service isc-dhcp-relay stop
 service isc-dhcp-relay start
 ```
 
@@ -256,7 +272,7 @@ http_access allow USERS AVAILABLE_WORKING
 http_access deny all
 ```
 
-##Jipangu (DHCP Server)
+## Jipangu (DHCP Server)
 
 ### config.sh
 ```
