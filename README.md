@@ -92,9 +92,15 @@ iface eth0 inet dhcp
 #### Skypie (Client)
 
 ```
+#auto eth0
+#iface eth0 inet static
+#	address 10.38.3.3
+#	netmask 255.255.255.0
+#	gateway 10.38.3.1
+
 auto eth0
 iface eth0 inet dhcp
-hwaddress ether 4a:ed:9a:f1:bc:97
+hwaddress ether 66:f9:90:6c:ae:ae
 ```
 
 ## All
@@ -147,6 +153,9 @@ kill -9 [pid]
 ### resolv.conf
 ```
 nameserver 192.168.122.1
+nameserver 10.38.2.2
+nameserver 10.38.2.3
+nameserver 10.38.2.4
 ```
 
 ## Foosha (Router)
@@ -158,11 +167,11 @@ iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE -s 10.38.0.0/16
 
 ### config.sh
 ```
-# !/bin/sh
+#!/bin/sh
 
 apt-get update
 apt-get install isc-dhcp-relay -y
-apt-get install nano
+#iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE -s 10.38.0.0/16
 
 cp /root/isc-dhcp-relay /etc/default
 cp /root/sysctl.conf /etc
@@ -186,16 +195,23 @@ OPTIONS=""
 
 ### config.sh
 ```
-# !/bin/sh
+#!/bin/sh
 
 echo nameserver 192.168.122.1 > /etc/resolv.conf
 
 apt-get update
 apt-get install bind9 -y
 
-cp /root/named.conf.options /etc/bind/
+service bind9 start
 
-service bind9 restart
+cp /root/named.conf.options /etc/bind
+cp /root/named.conf.local /etc/bind
+
+mkdir /etc/bind/kaizoku
+
+cp /root/proxy/super.franky.IUP1.com /etc/bind/kaizoku
+cp /root/franky.IUP1.com /etc/bind/kaizoku
+cp /root/2.38.10.in-addr.arpa /etc/bind/kaizoku
 ```
 
 ### named.conf.options
@@ -216,10 +232,41 @@ service bind9 restart
 };
 ```
 
+### named.conf.options
+```
+//
+// Do any local configuration here
+//
+
+// Consider adding the 1918 zones here, if they are not used in your
+// organization
+//include "/etc/bind/zones.rfc1918";
+
+zone "franky.IUP1.com" {
+        type master;
+        notify yes;
+        also-notify { 10.38.2.3; };
+        allow-transfer { 10.38.2.3; };
+        file "/etc/bind/kaizoku/franky.IUP1.com";
+};
+
+zone "super.franky.IUP1.com" {
+        type master;
+        file "/etc/bind/kaizoku/super.franky.IUP1.com";
+        allow-transfer { 10.38.3.69; };
+};
+
+zone "2.38.10.in-addr.arpa" {
+        type master;
+        file "/etc/bind/kaizoku/2.38.10.in-addr.arpa";
+};
+```
+
 ## Water7 (Proxy Server)
 
 ### config.sh
 ```
+
 #!/bin/sh
 
 echo nameserver 192.168.122.1 > /etc/resolv.conf
@@ -228,48 +275,92 @@ apt-get update
 apt-get install squid -y
 apt-get install apache2-utils -y
 
+cp /root/resolv.conf /etc
 cp /root/acl.conf /etc/squid
 cp /root/squid.conf /etc/squid
 cp /root/passwd /etc/squid
+cp /root/acl-bandwidth.conf /etc/squid
 
-#cp /root/squid.conf /etc/squid
-#cp /root/acl.conf /etc/squid
-#cp /root/acl-bandwidth.conf /etc/squid
-#cp /root/restrict-sites.acl /etc/squid
-#htpasswd -c /etc/squid/passwd jarkom203
+cp /root/named.conf.local /etc/bind
+cp /root/named.conf.options /etc/bind
 
-service squid restart
+mkdir /etc/bind/sunnygo
+
+cp /root/mecha.franky.IUP1.com /etc/bind/sunnygo
+cp /root/general.mecha.franky.IUP1.com /etc/bind/sunnygo
+
+service squid start
 service squid status
 ```
 
 ### acl.conf
 ```
-acl AVAILABLE_WORKING time MTWH 07:00-11:00
-acl AVAILABLE_WORKING time TWHF 17:00-23:59
-acl AVAILABLE_WORKING time WHFA 00:00-03:00
+acl AVAILABLE_WORKING_1 time S 00:00-23:59
+acl AVAILABLE_WORKING_2 time MT 00:00-06:59
+acl AVAILABLE_WORKING_3 time M 11:01-23:59
+acl AVAILABLE_WORKING_4 time TWH 11:01-16:59
+acl AVAILABLE_WORKING_5 time WH 03:01-06:59
+acl AVAILABLE_WORKING_6 time F 03:01-16:59
+acl AVAILABLE_WORKING_7 time A 03:01-23:59
 ```
 
 ### passwd
 ```
-luffybelikapaliup3:$apr1$.ngvk2dU$dI7CCjWGlLXCRAhPXc4YQ0
-zorobelikapaliup3:$apr1$iXli46Lw$oid7trkNDuY6.BY2Dqz3u1
+luffybelikapalIUP1:$apr1$ZDmOEh1W$klxkxjHGrKJbZHdqxQecd/
+zorobelikapalIUP1:$apr1$f6R5iv09$CzVv1d5k.rI1bQSG3q0KN.
 ```
 
 ### squid.conf
 ```
 include /etc/squid/acl.conf
+include /etc/squid/acl-bandwidth.conf
 
 http_port 5000
 visible_hostname jualbelikapal.IUP1.com
+
+http_access deny AVAILABLE_WORKING_1
+http_access deny AVAILABLE_WORKING_2
+http_access deny AVAILABLE_WORKING_3
+http_access deny AVAILABLE_WORKING_4
+http_access deny AVAILABLE_WORKING_5
+http_access deny AVAILABLE_WORKING_6
+http_access deny AVAILABLE_WORKING_7
+
 auth_param basic program /usr/lib/squid/basic_ncsa_auth /etc/squid/passwd
 auth_param basic children 5
-auth_param basic realm Login
+auth_param basic realm Proxy
 auth_param basic credentialsttl 2 hours
 auth_param basic casesensitive on
 acl USERS proxy_auth REQUIRED
+http_access allow USERS
 
-http_access allow USERS AVAILABLE_WORKING
-http_access deny all
+acl BLACKLIST dstdomain google.com
+deny_info http://super.franky.IUP1.com/ BLACKLIST
+#http_reply_access deny BLACKLIST
+```
+
+### acl-bandwidth.conf
+```
+acl download url_regex -i \.jpg$ \.png$
+
+auth_param basic program /usr/lib/squid/basic_ncsa_auth /etc/squid/passwd
+
+acl luffy proxy_auth luffybelikapalIUP1
+acl zoro proxy_auth zorobelikapalIUP1
+
+delay_pools 2
+delay_class 1 1
+delay_parameters 1 1250/1250
+delay_access 1 allow luffy
+delay_access 1 deny zoro
+delay_access 1 allow download
+delay_access 1 deny all
+
+delay_class 2 1
+delay_parameters 2 -1/-1
+delay_access 2 allow zoro
+delay_access 2 deny luffy
+delay_access 2 deny all
 ```
 
 ## Jipangu (DHCP Server)
@@ -318,7 +409,7 @@ subnet 10.38.2.0 netmask 255.255.255.0 {
 }
 
 host Skypie {
-    hardware ethernet 32:da:e0:de:26:d9;
+    hardware ethernet 66:f9:90:6c:ae:ae;
     fixed-address 10.38.3.69;
 }
 ```
@@ -336,26 +427,14 @@ INTERFACES="eth0"
 echo nameserver 192.168.122.1 > /etc/resolv.conf
 apt-get update
 apt-get install lynx -y
+apt-get install speedtest-cli -y
 
-echo nameserver 10.38.2.2 > /etc/resolv.conf
+#echo nameserver 10.38.2.2 > /etc/resolv.conf
+cp /root/resolv.conf /etc
 
 cp intconf.txt /etc/network/interfaces
 
-#echo nameserver 192.168.122.1 > /etc/resolv.conf
-
-#apt-get update
-#apt-get install lynx -y
-#apt install speedtest-cli
-
-#cp /root/interfaces /etc/network
-#cp /root/resolv.conf /etc
-
-#htpasswd -c /etc/squid/passwd jarkom203
-
-#export http_proxy="http://10.38.2.3:8080"
-#env | grep -i proxy
-
-#export PYTHONHTTPSVERIFY=0
+#export http_proxy=http://10.38.2.3:5000
 ```
 
 ### interfaces
@@ -378,10 +457,14 @@ iface eth0 inet dhcp
 echo nameserver 192.168.122.1 > /etc/resolv.conf
 apt-get update
 apt-get install lynx -y
+apt-get install speedtest-cli -y
 
-echo nameserver 10.38.2.2 > /etc/resolv.conf
+#echo nameserver 10.38.2.2 > /etc/resolv.conf
+cp /root/resolv.conf /etc
 
 cp intconf.txt /etc/network/interfaces
+
+#export http_proxy=http://10.38.2.3:5000
 ```
 
 ## Skypie
@@ -391,11 +474,89 @@ cp intconf.txt /etc/network/interfaces
 
 echo nameserver 192.168.122.1 > /etc/resolv.conf
 apt-get update
+apt-get install apache2 -y
+apt-get install php -y
+apt-get install libapache2-mod-php7.0 -y
+apt-get install wget -y
+apt-get install unzip -y
 apt-get install lynx -y
 
-echo nameserver 10.38.2.2 > /etc/resolv.conf
+#echo nameserver 10.38.2.2 > /etc/resolv.conf
+#echo nameserver 10.38.3.3
 
-cp intconf.txt /etc/network/interfaces
+cp /root/resolv.conf /etc
+cp franky.IUP1.com.conf /etc/apache2/sites-available
+cp /root/apache2.conf /etc/apache2
+
+mkdir /var/www/franky.IUP1.com
+
+cp /root/franky/home.html /var/www/franky.IUP1.com
+cp /root/franky/index.php /var/www/franky.IUP1.com
+
+a2ensite franky.IUP1.com
+service apache2 restart
+
+a2enmod rewrite
+service apache2 restart
+
+mkdir /var/www/super.franky.IUP1.com
+
+cp /root/.htaccess /var/www/franky.IUP1.com
+cp super.franky.IUP1.com.conf /etc/apache2/sites-available
+cp super.franky.IUP1.com /var/www
+
+mkdir /var/www/super.franky.IUP1.com/error
+
+mkdir /var/www/super.franky.IUP1.com/public
+mkdir /var/www/super.franky.IUP1.com/public/css
+mkdir /var/www/super.franky.IUP1.com/public/images
+mkdir /var/www/super.franky.IUP1.com/public/js
+
+cp /root/super.franky/error/404.html /var/www/super.franky.IUP1.com/error
+
+cp /root/super.franky/public/css/bro.css /var/www/super.franky.IUP1.com/public/css
+cp /root/super.franky/public/css/edit.css /var/www/super.franky.IUP1.com/public/css
+cp /root/super.franky/public/css/main.css /var/www/super.franky.IUP1.com/public/css
+
+cp /root/super.franky/public/images/background-frank.jpg /var/www/super.franky.IUP1.com/public/images
+cp /root/super.franky/public/images/bukanfrankytapirandom.99689 /var/www/super.franky.IUP1.com/public/images
+cp /root/super.franky/public/images/car.jpg /var/www/super.franky.IUP1.com/public/images
+cp /root/super.franky/public/images/eyeoffranky.jpg /var/www/super.franky.IUP1.com/public/images
+cp /root/super.franky/public/images/fake-franky.jpg234 /var/www/super.franky.IUP1.com/public/images
+cp /root/super.franky/public/images/franky.png /var/www/super.franky.IUP1.com/public/images
+cp /root/super.franky/public/images/frankysupersecretfood.cursed /var/www/super.franky.IUP1.com/public/images
+cp /root/super.franky/public/images/not-franky.jpg /var/www/super.franky.IUP1.com/public/images
+cp /root/super.franky/public/images/papa.franky.jpg /var/www/super.franky.IUP1.com/public/images
+cp /root/super.franky/public/images/roboto-frankyasdjklkljqwennmn.listingbro /var/www/super.franky.IUP1.com/public/images
+cp /root/super.franky/public/images/stockphotorandomfran.woi /var/www/super.franky.IUP1.com/public/images
+cp /root/super.franky/public/images/whatMatters.jpg /var/www/super.franky.IUP1.com/public/images
+
+cp /root/super.franky/public/js/autocomplete.js /var/www/super.franky.IUP1.com/public/js
+cp /root/super.franky/public/js/js.js /var/www/super.franky.IUP1.com/public/js
+cp /root/super.franky/public/js/reddit.js /var/www/super.franky.IUP1.com/public/js
+
+a2ensite super.franky.IUP1.com
+service apache2 restart
+
+cp general.mecha.franky.IUP1.com.conf /etc/apache2/sites-available
+cp ports.conf /etc/apache2
+
+mkdir /var/www/general.mecha.franky.IUP1.com
+
+cp /root/general.mecha.franky/drag.wav /var/www/general.mecha.franky.IUP1.com
+cp /root/general.mecha.franky/duck-duck-go.jpg /var/www/general.mecha.franky.IUP1.com
+cp /root/general.mecha.franky/f1.png /var/www/general.mecha.franky.IUP1.com
+cp /root/general.mecha.franky/funko-pop.jpg /var/www/general.mecha.franky.IUP1.com
+
+a2ensite general.mecha.franky.IUP1.com
+service apache2 restart
+
+cp 000-default.conf /etc/apache2/sites-available
+```
+
+### apache2.conf
+```
+ServerName 10.38.3.69
 ```
 
 ## TottoLand
@@ -406,8 +567,12 @@ cp intconf.txt /etc/network/interfaces
 echo nameserver 192.168.122.1 > /etc/resolv.conf
 apt-get update
 apt-get install lynx -y
+apt-get install speedtest-cli -y
 
-echo nameserver 10.38.2.2 > /etc/resolv.conf
+#echo nameserver 10.38.2.2 > /etc/resolv.conf
+cp /root/resolv.conf /etc
 
 cp intconf.txt /etc/network/interfaces
+
+#export http_proxy=http://10.38.2.3:5000
 ```
