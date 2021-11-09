@@ -576,3 +576,59 @@ cp intconf.txt /etc/network/interfaces
 
 #export http_proxy=http://10.38.2.3:5000
 ```
+
+# Testing
+
+### 1
+10.38.2.4
+
+### 2
+Alabasta / Loguetown
+ip a
+
+### 3
+Skypie / TottoLand
+ip a
+
+### 4
+ping google.com
+lynx google.com
+
+### 5
+lease time
+
+### 6
+Skypie
+10.38.3.69
+ip a
+
+### 7
+### 8
+### 9
+export http_proxy=http://10.38.2.3:5000
+lynx http://its.ac.id
+
+htpasswd -cm /etc/squid/passwd luffybelikapalIUP1
+luffy_IUP1
+luffy_IUP1
+
+htpasswd -m /etc/squid/passwd zorobelikapalIUP1
+zoro_IUP1
+zoro_IUP1
+
+env | grep -i proxy
+unset http_proxy
+
+### 10
+date -s "tanggal"
+
+### 11
+export http_proxy=http://10.38.2.3:5000
+lynx http://super.franky.IUP1.com
+lynx google.com
+
+### 12
+Tes download menggunakan proxy http://super.franky.IUP1.com
+
+### 13
+Tes download tanpa proxy di http://super.franky.IUP1.com
