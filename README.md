@@ -5,6 +5,7 @@
 2. (05111942000017) Juan Carlos Tepanus Pardosi
 3. (05111942000028) Salma Izzatul Islam
 
+# Konfigurasi Full 1-13:
 
 #### Foosha (Router)
 ``` 
