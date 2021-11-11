@@ -634,3 +634,92 @@ Tes download menggunakan proxy http://super.franky.IUP1.com
 
 ### 13
 Tes download tanpa proxy di http://super.franky.IUP1.com
+
+# Screenshots
+
+## Topografi
+
+![Screenshot (9513)](https://user-images.githubusercontent.com/61174498/141266023-5f0dc3c0-489f-4524-81ef-6fa6e49e4d79.png)
+
+## 0 DNS Server, Proxy Server, DHCP Server, Web Server, dan Client
+
+![Screenshot (9508)](https://user-images.githubusercontent.com/61174498/141266293-81d21759-572e-4f4e-a121-618bdd7b0f53.png)
+
+![Screenshot (9509)](https://user-images.githubusercontent.com/61174498/141266335-da2ae512-a473-423a-b79d-f818c8a98f92.png)
+
+![Screenshot (9510)](https://user-images.githubusercontent.com/61174498/141266354-799231c5-fece-4f5e-ad97-fe4fa65ac4cb.png)
+
+![Screenshot (9511)](https://user-images.githubusercontent.com/61174498/141266366-484aa75f-0cc8-40f8-ab91-8db0545064f9.png)
+
+![Screenshot (9512)](https://user-images.githubusercontent.com/61174498/141266375-3f04ebe2-de17-4382-84bf-2060bf44d2fd.png)
+
+## 1 DHCP Relay
+
+![Screenshot (9507)](https://user-images.githubusercontent.com/61174498/141266263-7626afd3-0148-4c69-b363-fc0144ca6832.png)
+
+## 2 Prefix 20-99 dan 150-169 Kiri
+
+![Screenshot (9515)](https://user-images.githubusercontent.com/61174498/141266434-0c3b15e8-b1c4-4e15-9ae5-1f18648720d5.png)
+
+![Screenshot (9516)](https://user-images.githubusercontent.com/61174498/141266460-1118971a-dd44-48e6-b9b6-014ff861aeb5.png)
+
+## 3 Prefix 30-50 Kanan
+
+![Screenshot (9517)](https://user-images.githubusercontent.com/61174498/141266495-f634b446-6bb0-4e48-9d6e-3976566614a5.png)
+
+## 4
+
+![Screenshot (9519)](https://user-images.githubusercontent.com/61174498/141267166-0c011d02-aa0a-4a50-8152-6b1b206002ca.png)
+
+![Screenshot (9520)](https://user-images.githubusercontent.com/61174498/141267188-bc2389d5-2f7f-4016-a7f8-2f8996bb620a.png)
+
+![Screenshot (9521)](https://user-images.githubusercontent.com/61174498/141267213-570365b1-a940-4f6e-a949-280ef0ffada3.png)
+
+## 5
+
+![Screenshot (9518)](https://user-images.githubusercontent.com/61174498/141267144-44227d9e-40e0-4f8f-8c54-0cec01494745.png)
+
+## 6
+
+![Screenshot (9522)](https://user-images.githubusercontent.com/61174498/141267284-af4c88f4-20e0-4283-8ba4-74b97e6ffaec.png)
+
+## 7 dan 8 dan 9
+
+![Screenshot (9523)](https://user-images.githubusercontent.com/61174498/141267318-9e6e7e02-9220-4c16-a7c4-287e9554ba8d.png)
+
+![Screenshot (9525)](https://user-images.githubusercontent.com/61174498/141267498-f23ecfc3-556d-4675-bcf9-c795a97b5ade.png)
+
+![Screenshot (9526)](https://user-images.githubusercontent.com/61174498/141267510-13df58ba-cdd1-47f1-8fa9-9d72d6275854.png)
+
+## 10
+
+![Screenshot (9527)](https://user-images.githubusercontent.com/61174498/141267844-7083d7b3-9c94-4582-813d-c53f1b17c4ef.png)
+
+![Screenshot (9531)](https://user-images.githubusercontent.com/61174498/141267954-3703051f-4b1c-4df3-acab-15650d19cb23.png)
+
+![Screenshot (9529)](https://user-images.githubusercontent.com/61174498/141267877-9fcebbfa-ff20-42a1-8a72-11700ebd0762.png)
+
+![Screenshot (9530)](https://user-images.githubusercontent.com/61174498/141267913-216590f7-1fdf-45ca-b476-f69f8ee2d221.png)
+
+## 11
+
+![Screenshot (9536)](https://user-images.githubusercontent.com/61174498/141268005-5fbe1398-ed39-430c-8afc-d97787b82dab.png)
+
+## 12
+
+![Screenshot (9537)](https://user-images.githubusercontent.com/61174498/141268101-0cf5f1ea-0f45-4a2b-9ce2-b100ac3dba43.png)
+
+## 13
+
+![Screenshot (9538)](https://user-images.githubusercontent.com/61174498/141268121-f3fc5790-2f3f-403f-9c39-8a6e8cd1e101.png)
+
+# Problems:
+
+a.) Nameserver in resolv.conf
+b.) Continuation of Second Module
+c.) Case Sensitive
+d.) Pointing to the wrong Node
+e.) Backup costs a lot of time
+f.) Setting Up costs a lot of time
+g.) Lynx Pointing to Mercusuar
+h.) Can't test download speed because of Mercusuar
