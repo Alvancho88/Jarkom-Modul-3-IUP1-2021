@@ -716,10 +716,17 @@ Tes download tanpa proxy di http://super.franky.IUP1.com
 # Problems:
 
 a.) Nameserver in resolv.conf
+
 b.) Continuation of Second Module
+
 c.) Case Sensitive
+
 d.) Pointing to the wrong Node
+
 e.) Backup costs a lot of time
+
 f.) Setting Up costs a lot of time
+
 g.) Lynx Pointing to Mercusuar
+
 h.) Can't test download speed because of Mercusuar
